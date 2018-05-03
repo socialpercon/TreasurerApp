@@ -12,6 +12,9 @@ import com.google.gson.GsonBuilder;
 import com.sora.treasurer.TAppEnums.RequestType;
 import com.sora.treasurer.http.pojo.GatewayResponse;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
 class Gateway {
@@ -50,6 +53,23 @@ class Gateway {
                 Log.i(TAG, "onResponse: " +  response);
                 Log.i(TAG, "onResponse: " + requestType.toString());
                 mGatewayResponse = mGson.fromJson(response, mRequestMap.get(requestType));
+                mGatewayResponse.setRequestType(requestType);
+                if (mGatewayListener != null) mGatewayListener.onResponse(mGatewayResponse);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+
+    final Response.Listener<JSONObject> onJsonRequestLoaded = new Response.Listener<JSONObject>() {
+        @Override
+        public void onResponse(JSONObject response) {
+            try {
+                RequestType requestType = mGatewayResponse.getRequestType();
+                Log.i(TAG, "onResponse: " +  response);
+                Log.i(TAG, "onResponse: " + requestType.toString());
+                mGatewayResponse = mGson.fromJson(response.toString(), mRequestMap.get(requestType));
                 mGatewayResponse.setRequestType(requestType);
                 if (mGatewayListener != null) mGatewayListener.onResponse(mGatewayResponse);
             } catch (Exception e) {

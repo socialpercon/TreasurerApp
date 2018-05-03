@@ -11,4 +11,5 @@ public enum RequestType {
     REQ_EXPENSE_GET_ALL,
     REQ_EXPENSE_GET_BY_ID,
     REQ_EXPENSE_GET_BY_TYPE,
+    REQ_EXPENSE_ENTITY,
 }

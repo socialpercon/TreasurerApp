@@ -31,8 +31,10 @@ import com.sora.treasurer.database.entities.ExpenseEntity;
 import com.sora.treasurer.http.GatewayListener;
 import com.sora.treasurer.http.TRGateway;
 import com.sora.treasurer.http.pojo.CreateResponse;
+import com.sora.treasurer.http.pojo.ExpenseEntityResponse;
 import com.sora.treasurer.http.pojo.ExpenseGetResponse;
 import com.sora.treasurer.http.pojo.GatewayResponse;
+import com.sora.treasurer.interfaces.RequestCallback;
 import com.sora.treasurer.utils.Util;
 
 import org.json.JSONArray;
@@ -59,8 +61,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private AppDatabase appDB;
     private Intent intent;
 
+    private Handler mHandler = new Handler();
     private static TRGateway mGateway;
     private static int mSyncRetry = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,17 +95,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mGateway = new TRGateway(this, null);
 
-         // updateServer();
-        getServerData();
-        populateList();
+        ServerSync(new RequestCallback() {
+            @Override
+            public void onResponse(Object response) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        populateList();
+                    }
+                });
+            }
+        });
 
-        List<ExpenseEntity> expenseEntities = appDB.expenseDao().findAll();
-        for(ExpenseEntity expenseEntity: expenseEntities) {
-            if(expenseEntity.getExpenseServerID() == null)
-            Log.i("WEWSZ", String.valueOf(expenseEntity.getExpenseID()) );
-        }
+
+
+        // updateServer();
+        // upDet();
+        // getServerData();
+
     }
 
+
+
+
+    private void upDet() {
+        List<ExpenseEntity> expenseEntities = appDB.expenseDao().findAllWithoutServerID();
+        mGateway.setResponseListener(new GatewayListener() {
+            @Override
+            public void onResponse(GatewayResponse gatewayResponse) {
+                Log.i("WEW", "onResponse: " + (gatewayResponse));
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error, RequestType requestType) {
+
+            }
+        }).expenseAPICreate(expenseEntities);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -142,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void showAlertRemoveDialog(boolean show, boolean forListView, @Nullable String message, final long ExpenseID, final int ExpenseType) {
+    private void showAlertRemoveDialog(boolean show, boolean forListView, @Nullable String message, final ExpenseEntity expenseEntity, final int ExpenseType) {
         if (show) {
             if (removeDialog == null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -151,7 +181,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 builder.setPositiveButton("Remove", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        appDB.expenseDao().deleteByID(ExpenseID);
+                        // appDB.expenseDao().deleteByID(ExpenseID);
+                        expenseEntity.setActive(false);
+                        appDB.expenseDao().UpdateExpense(expenseEntity);
                         populateList();
                         removeDialog = null;
                     }
@@ -189,13 +221,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.fabGain:
-            // case R.id.addGainBtnItem:
+                // case R.id.addGainBtnItem:
                 intent = new Intent(this, AddExpenseActivity.class);
                 intent.putExtra("expenseType", "Gain");
                 startActivityForResult(intent, 101);
                 break;
             case R.id.fabExpense:
-            // case R.id.addExpenseBtnItem:
+                // case R.id.addExpenseBtnItem:
                 intent = new Intent(this, AddExpenseActivity.class);
                 intent.putExtra("expenseType", "Expense");
                 startActivityForResult(intent, 101);
@@ -203,42 +235,86 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void getServerData() {
-        List<Long> IDs = appDB.expenseDao().findAllExpenseIDs();
-        mSyncRetry = 0;
-        if(mSyncRetry < 3) {
-            mGateway.setResponseListener(new GatewayListener() {
-                @Override
-                public void onResponse(GatewayResponse gatewayResponse) {
-                    Log.i("WEW", "onResponse: "+ ((ExpenseGetResponse) gatewayResponse).getData());
-                    ExpenseEntity[] expenseEntities = ((ExpenseGetResponse) gatewayResponse).getData();
-                    for(ExpenseEntity expenseEntity: expenseEntities) {
+    private void ServerSync(final RequestCallback requestCallback) {
+        List<ExpenseEntity> expenseEntitiesWithoutServerID = appDB.expenseDao().findAllWithoutServerID();
+        ServerCreateExpenseBulk(expenseEntitiesWithoutServerID, new RequestCallback() {
+            @Override
+            public void onResponse(Object response) {
+                ExpenseEntity[] expenseEntities = ((ExpenseEntity[]) response);
+
+                for(ExpenseEntity expenseEntity: expenseEntities) {
+                    ExpenseEntity expenseEntity1 = appDB.expenseDao().findEntity(expenseEntity.getDateCreated(), expenseEntity.getExpenseValue(), expenseEntity.getExpenseType());
+                    if(expenseEntity1 == null) {
                         appDB.expenseDao().CreateExpense(expenseEntity);
+                    } else {
+                        appDB.expenseDao().UpdateExpense(expenseEntity);
                     }
                 }
+                requestCallback.onResponse(response);
+            }
+        });
 
-                @Override
-                public void onErrorResponse(VolleyError error, RequestType requestType) {
-                    Log.i("WEW", "onResponse: "+ error);
-                    mSyncRetry++;
-                }
-            }).expenseAPIGetExcept(IDs);
+    }
+
+    private void ServerCreateExpenseBulk(List<ExpenseEntity> expenseEntities, final RequestCallback requestCallback) {
+        mGateway.setResponseListener(new GatewayListener() {
+            @Override
+            public void onResponse(GatewayResponse gatewayResponse) {
+                Log.i("WEWSUS", "onResponse: " + ((ExpenseEntityResponse) gatewayResponse).getData());
+                requestCallback.onResponse(((ExpenseEntityResponse) gatewayResponse).getData());
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error, RequestType requestType) {
+                Log.i("WEWZZ", "onResponse: " + error);
+                mSyncRetry++;
+            }
+        }).expenseAPICreate(expenseEntities);
+    }
+
+
+    private void getServerData() {
+        List<ExpenseEntity> expenseEntities = appDB.expenseDao().findAll();
+        if (expenseEntities != null) {
+            mSyncRetry = 0;
+            if (mSyncRetry < 3) {
+                mGateway.setResponseListener(new GatewayListener() {
+                    @Override
+                    public void onResponse(GatewayResponse gatewayResponse) {
+                        ExpenseEntity[] expenseEntities = ((ExpenseGetResponse) gatewayResponse).getData();
+                        for (ExpenseEntity expenseEntity : expenseEntities) {
+                            if (appDB.expenseDao().findEntity(expenseEntity.getDateCreated(), expenseEntity.getExpenseValue(), expenseEntity.getExpenseType()) == null) {
+                                ExpenseEntity expenseEntity1 = new ExpenseEntity(expenseEntity);
+                                Log.i("WEW", "onResponse: " + expenseEntity1.getExpenseDescription() + " " + String.valueOf(expenseEntity1.getActive()));
+                                appDB.expenseDao().CreateExpense(expenseEntity1);
+                            }
+                        }
+                        populateList();
+                    }
+
+                    @Override
+                    public void onErrorResponse(VolleyError error, RequestType requestType) {
+                        Log.i("WEW", "onResponse: " + error);
+                        mSyncRetry++;
+                    }
+                }).expenseAPIGetExceptEntity(expenseEntities);
+            }
         }
     }
 
     private void getServerDataA() {
         mSyncRetry = 0;
-        if(mSyncRetry < 3) {
+        if (mSyncRetry < 3) {
             mGateway.setResponseListener(new GatewayListener() {
                 @Override
                 public void onResponse(GatewayResponse gatewayResponse) {
-                    Log.i("WEW", "onResponse: "+ ((ExpenseGetResponse) gatewayResponse).getData());
+                    Log.i("WEW", "onResponse: " + ((ExpenseGetResponse) gatewayResponse).getData());
 
                 }
 
                 @Override
                 public void onErrorResponse(VolleyError error, RequestType requestType) {
-                    Log.i("WEW", "onResponse: "+ error);
+                    Log.i("WEW", "onResponse: " + error);
                     mSyncRetry++;
                 }
             }).expenseAPIGetAll();
@@ -247,20 +323,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void updateServer() {
         mSyncRetry = 0;
-        if(mSyncRetry < 3) {
+        if (mSyncRetry < 3) {
             List<ExpenseEntity> expenseEntities = appDB.expenseDao().findAll();
-            if(expenseEntities != null) {
+            if (expenseEntities != null) {
                 for (ExpenseEntity expenseEntity : appDB.expenseDao().findAll()) {
                     mGateway.setResponseListener(new GatewayListener() {
                         @Override
                         public void onResponse(GatewayResponse gatewayResponse) {
-                            Log.i("WEW", "onResponse: "+ ((CreateResponse) gatewayResponse).getData());
+                            Log.i("WEW", "onResponse: " + ((CreateResponse) gatewayResponse).getData());
 
                         }
 
                         @Override
                         public void onErrorResponse(VolleyError error, RequestType requestType) {
-                            Log.i("WEW", "onResponse: "+ error);
+                            Log.i("WEW", "onResponse: " + error);
                             mSyncRetry++;
                         }
                     }).expenseAPICreate(expenseEntity);
@@ -393,7 +469,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run() {
                 swipeRefreshLayout.setRefreshing(false);
-                populateList();
+                ServerSync(new RequestCallback() {
+                    @Override
+                    public void onResponse(Object response) {
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                populateList();
+                            }
+                        });
+                    }
+                });
             }
         }, 2000);
     }
@@ -416,6 +502,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String desc = (String) obj.get("expenseDescription");
         String expenseIDs = (String) obj.get("expenseIDs");
         String expenseType = (String) obj.get("expenseType");
+        ExpenseEntity expenseEntity = appDB.expenseDao().findByID(Long.valueOf(expenseIDs)).get(0);
         int eType = 0;
         if (expenseType.equals("Gain")) {
             eType = 1;
@@ -424,7 +511,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             desc = "this";
         }
 
-        showAlertRemoveDialog(true, true, "Delete " + desc + " from the list?", Long.valueOf(expenseIDs), eType);
+        showAlertRemoveDialog(true, true, "Delete " + expenseEntity.getExpenseDescription() + " from the list?", expenseEntity, eType);
     }
 
     @Override

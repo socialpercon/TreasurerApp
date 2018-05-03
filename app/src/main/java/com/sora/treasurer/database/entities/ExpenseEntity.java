@@ -4,8 +4,12 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
+import com.google.gson.JsonObject;
 import com.sora.treasurer.enums.ExpenseTypes;
 import com.sora.treasurer.utils.Util;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Date;
 
@@ -21,6 +25,7 @@ public class ExpenseEntity {
     private int ExpenseType;
     private double ExpenseValue;
     private String ExpenseDescription;
+    private boolean Active;
     private long CreatedBy;
     private long DateCreated;
     private long DateModified;
@@ -32,6 +37,17 @@ public class ExpenseEntity {
         this.CreatedBy = CreatedBy;
         this.DateCreated = Util.getCurrentDateTimeInMillis();
         this.DateModified = Util.getCurrentDateTimeInMillis();
+        this.Active = true;
+    }
+
+    public ExpenseEntity(ExpenseEntity expenseEntity) {
+        this.ExpenseValue = expenseEntity.ExpenseValue;
+        this.ExpenseType = expenseEntity.ExpenseType;
+        this.ExpenseDescription = expenseEntity.ExpenseDescription;
+        this.CreatedBy = expenseEntity.CreatedBy;
+        this.DateCreated = expenseEntity.DateCreated;
+        this.DateModified = expenseEntity.DateModified;
+        this.Active = expenseEntity.Active;
     }
 
     public long getExpenseID() {
@@ -68,6 +84,12 @@ public class ExpenseEntity {
     public void setExpenseDescription(String ExpenseDescription){
         this.ExpenseDescription = ExpenseDescription;
     }
+    public boolean getActive() {
+        return this.Active;
+    }
+    public void setActive(boolean Active){
+        this.Active = Active;
+    }
     public long getCreatedBy() {
         return this.CreatedBy;
     }
@@ -85,5 +107,22 @@ public class ExpenseEntity {
     }
     public void setDateModified(long DateModified){
         this.DateModified = DateModified;
+    }
+
+    public JSONObject getJsonObject() {
+        final JSONObject obj = new JSONObject();
+        try {
+            obj.put("ExpenseType", getExpenseType());
+            obj.put("ExpenseValue", getExpenseValue());
+            obj.put("ExpenseDescription", getExpenseDescription());
+            obj.put("Active", getActive());
+            obj.put("CreatedBy", getCreatedBy());
+            obj.put("DateCreated", getDateCreated());
+            obj.put("DateModified", getDateModified());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return obj;
     }
 }

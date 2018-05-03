@@ -18,8 +18,14 @@ import java.util.List;
 
 @Dao
 public interface ExpenseDao {
-    @Query("Select * from expenses order by DateCreated desc")
+    @Query("Select * from expenses  where Active = 1 order by DateCreated desc")
     List<ExpenseEntity> findAll();
+
+    @Query("Select * from expenses order by DateCreated desc")
+    List<ExpenseEntity> findEverything();
+
+    @Query("Select * from expenses where ExpenseServerID is not null order by DateCreated desc")
+    List<ExpenseEntity> findAllWithServerID();
 
     @Query("Select * from expenses where ExpenseServerID is null order by DateCreated desc")
     List<ExpenseEntity> findAllWithoutServerID();
@@ -30,8 +36,11 @@ public interface ExpenseDao {
     @Query("Select distinct ExpenseID from expenses order by ExpenseID desc")
     List<Long> findAllExpenseIDs();
 
-    @Query("Select * from expenses where ExpenseID in (:ExpenseIDs)")
+    @Query("Select * from expenses where ExpenseID in (:ExpenseIDs) and Active = 1")
     List<ExpenseEntity> findAllByIds(List<Long> ExpenseIDs);
+
+    @Query("Select * from expenses where DateCreated = :DateCreated and ExpenseValue = :ExpenseValue and ExpenseType = :ExpenseType")
+    ExpenseEntity findEntity(Long DateCreated, double ExpenseValue, int ExpenseType);
 
     @Insert(onConflict = OnConflictStrategy.FAIL)
     long CreateExpense(ExpenseEntity expenseEntity);
