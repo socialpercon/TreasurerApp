@@ -1,6 +1,9 @@
 package com.sora.treasurer.interfaces;
 
+import com.android.volley.VolleyError;
+
 public interface RequestCallback {
 
-    public void onResponse(Object response);
+    void onResponse(Object response);
+    void onErrorResponse(VolleyError error);
 }

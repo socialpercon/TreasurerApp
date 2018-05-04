@@ -1,13 +1,19 @@
 package com.sora.treasurer;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -43,7 +50,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,
+        SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener, NavigationView.OnNavigationItemSelectedListener {
 
     private final int EXPENSE_REQUEST = 101;
     private ArrayList<HashMap<String, String>> expenseList;
@@ -64,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Handler mHandler = new Handler();
     private static TRGateway mGateway;
     private static int mSyncRetry = 0;
+    private static int mBulkSyncRetry = 0;
+
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,14 +83,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        drawerLayout = findViewById(R.id.drawer_layout);
+
         fab = (FloatingActionButton) findViewById(R.id.fabMain);
         fabGain = findViewById(R.id.fabGain);
         fabExpense = findViewById(R.id.fabExpense);
         fab.setOnClickListener(this);
         fabGain.setOnClickListener(this);
         fabExpense.setOnClickListener(this);
-        // addExpenseItemBtn = findViewById(R.id.addExpenseBtnItem);
-        // addGainItemBtn = findViewById(R.id.addGainBtnItem);
+        addExpenseItemBtn = findViewById(R.id.addExpenseBtnItem);
+        addExpenseItemBtn.setOnClickListener(this);
+        addGainItemBtn = findViewById(R.id.addGainBtnItem);
+        addGainItemBtn.setOnClickListener(this);
         listView = findViewById(R.id.listView);
         listView.setOnItemClickListener(this);
         expenseTotalTxtView = findViewById(R.id.expenseTotalValTxt);
@@ -91,46 +106,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fabExpenseLayout = findViewById(R.id.layoutFabExpense);
         fabGainLayout = findViewById(R.id.layoutFabGain);
         fabMainLayout = findViewById(R.id.layoutMainFab);
-        expenseList = fetchData(false);
+        expenseList = fetchData();
 
         mGateway = new TRGateway(this, null);
 
-        ServerSync(new RequestCallback() {
-            @Override
-            public void onResponse(Object response) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        populateList();
-                    }
-                });
-            }
-        });
+        setupToolbar();
+        setupNavigationView();
+        populateList();
 
+        // createDialogWithoutDateField().show();
 
-
-        // updateServer();
-        // upDet();
-        // getServerData();
-
-    }
-
-
-
-
-    private void upDet() {
-        List<ExpenseEntity> expenseEntities = appDB.expenseDao().findAllWithoutServerID();
-        mGateway.setResponseListener(new GatewayListener() {
-            @Override
-            public void onResponse(GatewayResponse gatewayResponse) {
-                Log.i("WEW", "onResponse: " + (gatewayResponse));
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error, RequestType requestType) {
-
-            }
-        }).expenseAPICreate(expenseEntities);
     }
 
     @Override
@@ -138,6 +123,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -153,6 +147,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setupToolbar() {
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+    }
+    private void setupNavigationView() {
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        //set version text for TreatU
+        View headerView = navigationView.getHeaderView(0);
+        ((TextView) headerView.findViewById(R.id.header_version_textview)).setText(
+                String.format("Inventory App ver. %1$s", BuildConfig.VERSION_NAME));
+        //set first item selected
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
 
@@ -221,13 +234,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.fabGain:
-                // case R.id.addGainBtnItem:
+            case R.id.addGainBtnItem:
                 intent = new Intent(this, AddExpenseActivity.class);
                 intent.putExtra("expenseType", "Gain");
                 startActivityForResult(intent, 101);
                 break;
             case R.id.fabExpense:
-                // case R.id.addExpenseBtnItem:
+            case R.id.addExpenseBtnItem:
                 intent = new Intent(this, AddExpenseActivity.class);
                 intent.putExtra("expenseType", "Expense");
                 startActivityForResult(intent, 101);
@@ -235,112 +248,67 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_main:
+                break;
+            case R.id.nav_dashboard:
+                createDialogWithoutDateField().show();
+                break;
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
     private void ServerSync(final RequestCallback requestCallback) {
-        List<ExpenseEntity> expenseEntitiesWithoutServerID = appDB.expenseDao().findAllWithoutServerID();
+        List<ExpenseEntity> expenseEntitiesWithoutServerID = appDB.expenseDao().findEverything();
         ServerCreateExpenseBulk(expenseEntitiesWithoutServerID, new RequestCallback() {
             @Override
             public void onResponse(Object response) {
                 ExpenseEntity[] expenseEntities = ((ExpenseEntity[]) response);
 
-                for(ExpenseEntity expenseEntity: expenseEntities) {
-                    ExpenseEntity expenseEntity1 = appDB.expenseDao().findEntity(expenseEntity.getDateCreated(), expenseEntity.getExpenseValue(), expenseEntity.getExpenseType());
-                    if(expenseEntity1 == null) {
-                        appDB.expenseDao().CreateExpense(expenseEntity);
+                for (ExpenseEntity ServerExpenseEntity : expenseEntities) {
+                    Log.i("SyncResponse", "onResponse: " + ServerExpenseEntity.toString());
+                    ExpenseEntity expenseEntity = appDB.expenseDao().findEntity(ServerExpenseEntity.getDateCreated(), ServerExpenseEntity.getExpenseValue(), ServerExpenseEntity.getExpenseType());
+                    if (expenseEntity == null) {
+                        ExpenseEntity SyncExpenseEntity = new ExpenseEntity(ServerExpenseEntity);
+                        appDB.expenseDao().CreateExpense(SyncExpenseEntity);
                     } else {
+                        expenseEntity.UpdateEntity(ServerExpenseEntity);
                         appDB.expenseDao().UpdateExpense(expenseEntity);
                     }
                 }
+                AfterSyncCleanUp();
                 requestCallback.onResponse(response);
             }
-        });
 
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                requestCallback.onErrorResponse(error);
+            }
+        });
     }
 
     private void ServerCreateExpenseBulk(List<ExpenseEntity> expenseEntities, final RequestCallback requestCallback) {
         mGateway.setResponseListener(new GatewayListener() {
             @Override
             public void onResponse(GatewayResponse gatewayResponse) {
-                Log.i("WEWSUS", "onResponse: " + ((ExpenseEntityResponse) gatewayResponse).getData());
                 requestCallback.onResponse(((ExpenseEntityResponse) gatewayResponse).getData());
             }
 
             @Override
             public void onErrorResponse(VolleyError error, RequestType requestType) {
-                Log.i("WEWZZ", "onResponse: " + error);
-                mSyncRetry++;
+                requestCallback.onErrorResponse(error);
             }
         }).expenseAPICreate(expenseEntities);
     }
 
-
-    private void getServerData() {
-        List<ExpenseEntity> expenseEntities = appDB.expenseDao().findAll();
-        if (expenseEntities != null) {
-            mSyncRetry = 0;
-            if (mSyncRetry < 3) {
-                mGateway.setResponseListener(new GatewayListener() {
-                    @Override
-                    public void onResponse(GatewayResponse gatewayResponse) {
-                        ExpenseEntity[] expenseEntities = ((ExpenseGetResponse) gatewayResponse).getData();
-                        for (ExpenseEntity expenseEntity : expenseEntities) {
-                            if (appDB.expenseDao().findEntity(expenseEntity.getDateCreated(), expenseEntity.getExpenseValue(), expenseEntity.getExpenseType()) == null) {
-                                ExpenseEntity expenseEntity1 = new ExpenseEntity(expenseEntity);
-                                Log.i("WEW", "onResponse: " + expenseEntity1.getExpenseDescription() + " " + String.valueOf(expenseEntity1.getActive()));
-                                appDB.expenseDao().CreateExpense(expenseEntity1);
-                            }
-                        }
-                        populateList();
-                    }
-
-                    @Override
-                    public void onErrorResponse(VolleyError error, RequestType requestType) {
-                        Log.i("WEW", "onResponse: " + error);
-                        mSyncRetry++;
-                    }
-                }).expenseAPIGetExceptEntity(expenseEntities);
-            }
-        }
-    }
-
-    private void getServerDataA() {
-        mSyncRetry = 0;
-        if (mSyncRetry < 3) {
-            mGateway.setResponseListener(new GatewayListener() {
-                @Override
-                public void onResponse(GatewayResponse gatewayResponse) {
-                    Log.i("WEW", "onResponse: " + ((ExpenseGetResponse) gatewayResponse).getData());
-
-                }
-
-                @Override
-                public void onErrorResponse(VolleyError error, RequestType requestType) {
-                    Log.i("WEW", "onResponse: " + error);
-                    mSyncRetry++;
-                }
-            }).expenseAPIGetAll();
-        }
-    }
-
-    private void updateServer() {
-        mSyncRetry = 0;
-        if (mSyncRetry < 3) {
-            List<ExpenseEntity> expenseEntities = appDB.expenseDao().findAll();
-            if (expenseEntities != null) {
-                for (ExpenseEntity expenseEntity : appDB.expenseDao().findAll()) {
-                    mGateway.setResponseListener(new GatewayListener() {
-                        @Override
-                        public void onResponse(GatewayResponse gatewayResponse) {
-                            Log.i("WEW", "onResponse: " + ((CreateResponse) gatewayResponse).getData());
-
-                        }
-
-                        @Override
-                        public void onErrorResponse(VolleyError error, RequestType requestType) {
-                            Log.i("WEW", "onResponse: " + error);
-                            mSyncRetry++;
-                        }
-                    }).expenseAPICreate(expenseEntity);
-                }
+    private void AfterSyncCleanUp() {
+        List<ExpenseEntity> expenseEntities = appDB.expenseDao().findEverything();
+        for (ExpenseEntity expenseEntity : expenseEntities) {
+            if (!expenseEntity.getActive()) {
+                appDB.expenseDao().deleteByID(expenseEntity.getExpenseID());
             }
         }
     }
@@ -363,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void populateList() {
-        expenseList = fetchData(false);
+        expenseList = fetchData();
 
         ArrayList<HashMap<String, String>> tempList = new ArrayList<>();
         int limit = expenseList.size();
@@ -413,39 +381,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private ArrayList<HashMap<String, String>> fetchData(boolean fetchPrevious) {
+    private ArrayList<HashMap<String, String>> fetchData() {
         ArrayList<HashMap<String, String>> data = new ArrayList<>();
         double totalVal = 0;
-        if (fetchPrevious) {
-            List<Long> ExpenseIDs = appDB.expenseDao().findAllExpenseIDs();
-
-            if (ExpenseIDs.size() > 0) {
-                for (ExpenseEntity expenseEntity : appDB.expenseDao().findAllByIds(ExpenseIDs)) {
-                    if (expenseEntity.getExpenseType() == 0) {
-                        totalVal -= expenseEntity.getExpenseValue();
-                    } else {
-                        totalVal += expenseEntity.getExpenseValue();
-                    }
-
-                    data.add(makeExpenseEntityHashMap(expenseEntity));
-                }
+        for (ExpenseEntity expenseEntity : appDB.expenseDao().findAllActive()) {
+            if (expenseEntity.getExpenseType() == 0) {
+                totalVal -= expenseEntity.getExpenseValue();
+            } else {
+                totalVal += expenseEntity.getExpenseValue();
             }
-        } else {
-            for (ExpenseEntity expenseEntity : appDB.expenseDao().findAll()) {
-                if (expenseEntity.getExpenseType() == 0) {
-                    totalVal -= expenseEntity.getExpenseValue();
-                } else {
-                    totalVal += expenseEntity.getExpenseValue();
-                }
-
-                data.add(makeExpenseEntityHashMap(expenseEntity));
-            }
+            data.add(makeExpenseEntityHashMap(expenseEntity));
         }
         expenseTotalTxtView.setText(String.valueOf(totalVal));
         return data;
     }
 
     private HashMap<String, String> makeExpenseEntityHashMap(ExpenseEntity expenseEntity) {
+        Log.i("Expense Data", "Value: " + String.valueOf(expenseEntity.getExpenseValue()) + "| Description " + String.valueOf(expenseEntity.getExpenseDescription()));
         HashMap<String, String> temp = new HashMap<>();
         temp.put("expenseIDs", String.valueOf(expenseEntity.getExpenseID()));
         temp.put("expenseValues", String.valueOf(expenseEntity.getExpenseValue()));
@@ -472,6 +424,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ServerSync(new RequestCallback() {
                     @Override
                     public void onResponse(Object response) {
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                populateList();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -528,4 +490,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+
+    private DatePickerDialog createDialogWithoutDateField() {
+        DatePickerDialog dpd = new DatePickerDialog(this, null, 2014, 1, 24);
+        try {
+            java.lang.reflect.Field[] datePickerDialogFields = dpd.getClass().getDeclaredFields();
+            for (java.lang.reflect.Field datePickerDialogField : datePickerDialogFields) {
+                if (datePickerDialogField.getName().equals("mDatePicker")) {
+                    datePickerDialogField.setAccessible(true);
+                    DatePicker datePicker = (DatePicker) datePickerDialogField.get(dpd);
+                    java.lang.reflect.Field[] datePickerFields = datePickerDialogField.getType().getDeclaredFields();
+                    for (java.lang.reflect.Field datePickerField : datePickerFields) {
+                        Log.i("test", datePickerField.getName());
+                        if ("mDaySpinner".equals(datePickerField.getName())) {
+                            datePickerField.setAccessible(true);
+                            Object dayPicker = datePickerField.get(datePicker);
+                            ((View) dayPicker).setVisibility(View.GONE);
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex) {
+        }
+        return dpd;
+    }
+
+
+
+
 }

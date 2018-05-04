@@ -32,10 +32,10 @@ import java.util.Map;
 
 public class TRGateway extends Gateway {
     private static final String TAG = "TRGateway";
-    private boolean local = true;
+    private boolean local = false;
     private final String[] API_SERVER = new String[]{"test-", "stage-", ""};
     private final int API_MODE = 0;
-    private final String API_BASE_ENDPOINT = local? "https://1d6213bb.ngrok.io" : "http://treasurerapp.fr.openode.io";
+    private final String API_BASE_ENDPOINT = local? "https://bf27b617.ngrok.io" : "http://treasurerapp.fr.openode.io";
     private final String AUTH_BASE_ENDPOINT = "https://" + API_SERVER[API_MODE] + "auth.base.study";
     public TRGateway(Context context, GatewayListener callback) {
         super(context, callback);
@@ -176,15 +176,23 @@ public class TRGateway extends Gateway {
     }
 
     public void expenseAPICreate(final List<ExpenseEntity> expenseEntities) {
-        String endpoint = API_BASE_ENDPOINT + "/api/expense/create/many";
+        String endpoint = API_BASE_ENDPOINT + "/api/expense/sync";
         Log.d(TAG, "expenseAPICreate: " + endpoint);
         this.mGatewayResponse.setRequestType(RequestType.REQ_EXPENSE_ENTITY);
 
+        JSONObject toSendObj = new JSONObject();
         JSONArray arr = new JSONArray();
         for(ExpenseEntity expenseEntity: expenseEntities) {
             arr.put(expenseEntity.getJsonObject());
         }
-        CustomJsonRequest jsonArrayRequest = new CustomJsonRequest(Request.Method.POST, endpoint, arr, onJsonRequestLoaded, onRequestError);
+        try {
+            toSendObj.put("CreatedBy",0);
+            toSendObj.put("Data",arr);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        CustomJsonRequest jsonArrayRequest = new CustomJsonRequest(Request.Method.POST, endpoint, toSendObj, onJsonRequestLoaded, onRequestError);
         this.mRequestQueue.add(jsonArrayRequest);
     }
     public void expenseAPIRemove(final ExpenseEntity expenseEntity) {

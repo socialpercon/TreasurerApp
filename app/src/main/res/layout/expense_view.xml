@@ -8,6 +8,7 @@
     android:orientation="vertical"
     android:background="?android:attr/selectableItemBackground"
     android:descendantFocusability="blocksDescendants">
+
     <TextView
         android:id="@+id/list_item_value"
         android:layout_width="match_parent"
@@ -27,12 +28,13 @@
         android:id="@+id/list_item_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:textColor="@android:color/black"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/list_item_type"
+        android:textColor="@android:color/black"
         android:visibility="gone"/>
 </LinearLayout>

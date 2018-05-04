@@ -25,11 +25,15 @@ public class ExpenseEntity {
     private int ExpenseType;
     private double ExpenseValue;
     private String ExpenseDescription;
+    // TEMPORARY SOFT DELETE
     private boolean Active;
+    // BOOLEAN TO CHECK IF DATA IS SYNCED WITH SERVER
+    private boolean Updated;
     private long CreatedBy;
     private long DateCreated;
     private long DateModified;
 
+    // MANUALLY CREATED
     public ExpenseEntity(double ExpenseValue, int ExpenseType,String ExpenseDescription, long CreatedBy) {
         this.ExpenseValue = ExpenseValue;
         this.ExpenseType = ExpenseType;
@@ -38,8 +42,10 @@ public class ExpenseEntity {
         this.DateCreated = Util.getCurrentDateTimeInMillis();
         this.DateModified = Util.getCurrentDateTimeInMillis();
         this.Active = true;
+        this.Updated = false;
     }
 
+    // DATA FROM SERVER
     public ExpenseEntity(ExpenseEntity expenseEntity) {
         this.ExpenseValue = expenseEntity.ExpenseValue;
         this.ExpenseType = expenseEntity.ExpenseType;
@@ -48,6 +54,7 @@ public class ExpenseEntity {
         this.DateCreated = expenseEntity.DateCreated;
         this.DateModified = expenseEntity.DateModified;
         this.Active = expenseEntity.Active;
+        this.Updated = true;
     }
 
     public long getExpenseID() {
@@ -109,6 +116,20 @@ public class ExpenseEntity {
         this.DateModified = DateModified;
     }
 
+    public boolean getUpdated() { return  this.Updated; }
+    public void setUpdated(Boolean Updated) { this.Updated = Updated; }
+
+    public void UpdateEntity(ExpenseEntity expenseEntity) {
+        this.ExpenseValue = expenseEntity.ExpenseValue;
+        this.ExpenseType = expenseEntity.ExpenseType;
+        this.ExpenseDescription = expenseEntity.ExpenseDescription;
+        this.CreatedBy = expenseEntity.CreatedBy;
+        this.DateCreated = expenseEntity.DateCreated;
+        this.DateModified = expenseEntity.DateModified;
+        this.Active = expenseEntity.Active;
+        this.Updated = true;
+    }
+
     public JSONObject getJsonObject() {
         final JSONObject obj = new JSONObject();
         try {
@@ -124,5 +145,17 @@ public class ExpenseEntity {
             e.printStackTrace();
         }
         return obj;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "ExpenseID: " + String.valueOf(this.ExpenseID) + "," +
+                "ExpenseType: " + String.valueOf(this.ExpenseType) + "," +
+                "ExpenseDescription: " + String.valueOf(this.ExpenseDescription) + "," +
+                "Active: " + String.valueOf(this.Active) + "," +
+                "CreatedBy: " + String.valueOf(this.CreatedBy) + "," +
+                "DateCreated: " + String.valueOf(this.DateCreated) + "," +
+                "}";
     }
 }

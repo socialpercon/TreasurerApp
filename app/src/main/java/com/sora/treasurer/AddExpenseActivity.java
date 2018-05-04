@@ -2,6 +2,7 @@ package com.sora.treasurer;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -39,11 +40,13 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
         expenseType = intent.getStringExtra("expenseType");
         if(expenseType.equals("Expense")) {
             addExpenseBtn.setText("Add Expense");
+            addExpenseBtn.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             expenseVal.setText("Expense Value: ");
             expenseTypeForEntity = 0;
         } else if (expenseType.equals("Gain")) {
             expenseVal.setText("Gain Value: ");
             addExpenseBtn.setText("Add Gain");
+            addExpenseBtn.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
             expenseTypeForEntity = 1;
         }
         super.onStart();

@@ -3,4 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="expense_string">Add Expense</string>
     <string name="gain_string">Add Gain</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

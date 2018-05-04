@@ -19,7 +19,7 @@ import java.util.List;
 @Dao
 public interface ExpenseDao {
     @Query("Select * from expenses  where Active = 1 order by DateCreated desc")
-    List<ExpenseEntity> findAll();
+    List<ExpenseEntity> findAllActive();
 
     @Query("Select * from expenses order by DateCreated desc")
     List<ExpenseEntity> findEverything();

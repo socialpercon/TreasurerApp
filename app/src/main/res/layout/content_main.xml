@@ -84,5 +84,53 @@
 
 </android.support.v7.widget.LinearLayoutCompat>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary">
+
+                <Button
+                    android:id="@+id/addGainBtnItem"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="Gain"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/addExpenseBtnItem"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/colorAccent"
+                    android:text="Expense"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+
+
+        </android.support.v7.widget.LinearLayoutCompat>
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

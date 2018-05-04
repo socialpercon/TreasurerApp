@@ -12,6 +12,7 @@
     android:paddingTop="20dp"
     android:orientation="vertical">
 
+
     <LinearLayout
         android:id="@+id/layoutFabGain"
         android:layout_width="wrap_content"
@@ -121,4 +122,7 @@
             app:fabSize="normal" />
 
     </LinearLayout>
+
+
+
 </FrameLayout>
