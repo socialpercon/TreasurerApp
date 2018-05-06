@@ -33,6 +33,9 @@ public interface ExpenseDao {
     @Query("Select * from expenses where ExpenseID = :ExpenseID")
     List<ExpenseEntity> findByID(long ExpenseID);
 
+    @Query("Select * from expenses where DateCreated like :DateCreated")
+    List<ExpenseEntity> findExpensesPerDay(String DateCreated);
+
     @Query("Select distinct ExpenseID from expenses order by ExpenseID desc")
     List<Long> findAllExpenseIDs();
 
@@ -41,6 +44,15 @@ public interface ExpenseDao {
 
     @Query("Select * from expenses where DateCreated = :DateCreated and ExpenseValue = :ExpenseValue and ExpenseType = :ExpenseType")
     ExpenseEntity findEntity(Long DateCreated, double ExpenseValue, int ExpenseType);
+
+    @Query("Select MIN(ExpenseValue) from expenses where Active = 1")
+    double findLargestVlue();
+
+    @Query("Select MIN(DateCreated) from expenses where Active = 1")
+    Long findFirstEntryDate();
+
+    @Query("Select MAX(DateCreated) from expenses where Active = 1")
+    Long findLastEntryDate();
 
     @Insert(onConflict = OnConflictStrategy.FAIL)
     long CreateExpense(ExpenseEntity expenseEntity);

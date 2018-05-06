@@ -4,133 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.sora.treasurer.MainActivity"
     tools:showIn="@layout/activity_main">
 
-<android.support.v7.widget.LinearLayoutCompat
-    android:layout_marginRight="15dp"
-    android:layout_marginLeft="15dp"
-    android:layout_marginBottom="50dp"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
 
-
-    <android.support.v7.widget.LinearLayoutCompat
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp">
-
-        <android.support.v7.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/expenseTotalTxt"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:text="Total :"
-                android:textStyle="bold"
-                android:inputType="number"
-                android:layout_weight="1"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
-                android:text="P"
-                android:textStyle="bold"
-                android:textColor="@color/colorAccent"
-                android:inputType="number"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
-            <TextView
-                android:id="@+id/expenseTotalValTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                android:textColor="@color/colorAccent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
-        </android.support.v7.widget.LinearLayoutCompat>
-
-    </android.support.v7.widget.LinearLayoutCompat>
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/swipeToRefreshExpenses">
-        <ListView
-            android:id="@+id/listView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:choiceMode="none"/>
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-    <TextView
-        android:id="@+id/emptyElement"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="No results"/>
-
-</android.support.v7.widget.LinearLayoutCompat>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.v7.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            >
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/colorPrimary">
-
-                <Button
-                    android:id="@+id/addGainBtnItem"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:text="Gain"
-                    android:textColor="@android:color/white" />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:background="@color/colorAccent"
-                android:layout_weight="1">
-
-                <Button
-                    android:id="@+id/addExpenseBtnItem"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/colorAccent"
-                    android:text="Expense"
-                    android:textColor="@android:color/white" />
-            </LinearLayout>
-
-
-
-        </android.support.v7.widget.LinearLayoutCompat>
-    </RelativeLayout>
+        android:layout_height="match_parent"></FrameLayout>
 </android.support.constraint.ConstraintLayout>

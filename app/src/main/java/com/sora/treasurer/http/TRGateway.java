@@ -35,7 +35,7 @@ public class TRGateway extends Gateway {
     private boolean local = false;
     private final String[] API_SERVER = new String[]{"test-", "stage-", ""};
     private final int API_MODE = 0;
-    private final String API_BASE_ENDPOINT = local? "https://bf27b617.ngrok.io" : "http://treasurerapp.fr.openode.io";
+    private final String API_BASE_ENDPOINT = local? "https://dd3e8cf2.ngrok.io" : "https://treasurerapp.herokuapp.com";
     private final String AUTH_BASE_ENDPOINT = "https://" + API_SERVER[API_MODE] + "auth.base.study";
     public TRGateway(Context context, GatewayListener callback) {
         super(context, callback);

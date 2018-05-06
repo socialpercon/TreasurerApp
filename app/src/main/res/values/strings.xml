@@ -3,7 +3,23 @@
     <string name="action_settings">Settings</string>
     <string name="expense_string">Add Expense</string>
     <string name="gain_string">Add Gain</string>
-
+    <string name="currencyPHP">\u20B1</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_create_expense">CreateExpenseActivity</string>
+
+
+
+    <!-- EXPENSE CATEGORIES -->
+    <string name="category_food">Food</string>
+    <string name="category_transport">Transport</string>
+    <string name="category__rent">Rent</string>
+    <string name="category_fitness">Fitness</string>
+    <string name="category_laundry">Laundry</string>
+    <string name="category_allowance">Allowance</string>
+    <string name="category_atm">ATM Withdrawal</string>
+    <string name="category_more">More</string>
 </resources>

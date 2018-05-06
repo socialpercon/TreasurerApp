@@ -3,6 +3,7 @@ package com.sora.treasurer.database.entities;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.util.Log;
 
 import com.google.gson.JsonObject;
 import com.sora.treasurer.enums.ExpenseTypes;
@@ -47,6 +48,7 @@ public class ExpenseEntity {
 
     // DATA FROM SERVER
     public ExpenseEntity(ExpenseEntity expenseEntity) {
+        this.ExpenseServerID = expenseEntity.ExpenseServerID;
         this.ExpenseValue = expenseEntity.ExpenseValue;
         this.ExpenseType = expenseEntity.ExpenseType;
         this.ExpenseDescription = expenseEntity.ExpenseDescription;
@@ -120,6 +122,7 @@ public class ExpenseEntity {
     public void setUpdated(Boolean Updated) { this.Updated = Updated; }
 
     public void UpdateEntity(ExpenseEntity expenseEntity) {
+        this.ExpenseServerID = expenseEntity.ExpenseServerID;
         this.ExpenseValue = expenseEntity.ExpenseValue;
         this.ExpenseType = expenseEntity.ExpenseType;
         this.ExpenseDescription = expenseEntity.ExpenseDescription;
@@ -133,10 +136,12 @@ public class ExpenseEntity {
     public JSONObject getJsonObject() {
         final JSONObject obj = new JSONObject();
         try {
+            obj.put("ExpenseServerID", getExpenseServerID());
             obj.put("ExpenseType", getExpenseType());
             obj.put("ExpenseValue", getExpenseValue());
             obj.put("ExpenseDescription", getExpenseDescription());
             obj.put("Active", getActive());
+            obj.put("Updated", getUpdated());
             obj.put("CreatedBy", getCreatedBy());
             obj.put("DateCreated", getDateCreated());
             obj.put("DateModified", getDateModified());
@@ -151,6 +156,7 @@ public class ExpenseEntity {
     public String toString() {
         return "{" +
                 "ExpenseID: " + String.valueOf(this.ExpenseID) + "," +
+                "ExpenseServerID: " + String.valueOf(this.ExpenseServerID) + "," +
                 "ExpenseType: " + String.valueOf(this.ExpenseType) + "," +
                 "ExpenseDescription: " + String.valueOf(this.ExpenseDescription) + "," +
                 "Active: " + String.valueOf(this.Active) + "," +
