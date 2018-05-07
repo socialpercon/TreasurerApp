@@ -13,7 +13,7 @@
         android:visibility="visible">
 
         <LinearLayout
-            android:id="@+id/expenseFood"
+            android:id="@+id/DB_expenseCategoryFood"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
@@ -35,12 +35,12 @@
                 android:fontFamily="@font/roboto_thin"
                 android:text="Food"
                 android:textAlignment="center"
-                android:textColor="@android:color/white"
+                android:textColor="@color/expense_tint"
                 android:textSize="10dp" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/expenseTransportation"
+            android:id="@+id/DB_expenseTransportation"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
@@ -63,12 +63,12 @@
                 android:fontFamily="@font/roboto_thin"
                 android:text="Transport"
                 android:textAlignment="center"
-                android:textColor="@android:color/white"
+                android:textColor="@color/expense_tint"
                 android:textSize="10dp" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/expenseCategoryRent"
+            android:id="@+id/DB_gainCategoryATM"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
@@ -82,23 +82,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
-                android:src="@drawable/ic_expense_rent" />
+                android:src="@drawable/ic_gain_atm_card" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
                 android:fontFamily="@font/roboto_thin"
-                android:text="Rent"
+                android:text="@string/category_atm"
                 android:textAlignment="center"
-                android:textColor="@android:color/white"
+                android:textColor="@color/gain_tint"
                 android:textSize="10dp" />
         </LinearLayout>
 
 
 
         <LinearLayout
-            android:id="@+id/expenseCategoryLaundry"
+            android:id="@+id/DB_gainCategoryAllowance"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
@@ -112,21 +112,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
-                android:src="@drawable/ic_expense_laundry" />
+                android:src="@drawable/ic_gain_allowance" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
                 android:fontFamily="@font/roboto_thin"
-                android:text="@string/category_laundry"
+                android:text="@string/category_allowance"
                 android:textAlignment="center"
-                android:textColor="@android:color/white"
+                android:textColor="@color/gain_tint"
                 android:textSize="10dp" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/expenseMore"
+            android:id="@+id/DB_moreCategories"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
@@ -147,7 +147,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
                 android:fontFamily="@font/roboto_thin"
-                android:text="@string/gain_string"
+                android:text="@string/category_grocery"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"
                 android:textSize="10dp" />

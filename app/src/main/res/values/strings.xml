@@ -12,7 +12,6 @@
     <string name="title_activity_create_expense">CreateExpenseActivity</string>
 
 
-
     <!-- EXPENSE CATEGORIES -->
     <string name="category_food">Food</string>
     <string name="category_transport">Transport</string>
@@ -20,6 +19,18 @@
     <string name="category_fitness">Fitness</string>
     <string name="category_laundry">Laundry</string>
     <string name="category_allowance">Allowance</string>
-    <string name="category_atm">ATM Withdrawal</string>
+    <string name="category_grocery">Grocery</string>
+    <string name="category_electronics">Electronics</string>
+    <string name="category_atm">ATM</string>
+    <string name="category_medical">Medical</string>
     <string name="category_more">More</string>
+    <string name="category_gift">Gift</string>
+    <string name="category_stocks">Stocks</string>
+    <string name="category_entertainment">Entertainment</string>
+    <string name="category_salary">Salary</string>
+    <string name="category_others">Others</string>
+
+    <!-- EXPENSE FORM -->
+    <string name="form_header_expense">Add New Expense</string>
+    <string name="form_header_income">Add New Income</string>
 </resources>

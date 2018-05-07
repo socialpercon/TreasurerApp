@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@drawable/gradient_primary"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/treasurerAppTheme"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.LinearLayoutCompat
-        android:id="@+id/ExpenseOptions"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/main_graph_container"
-        android:paddingBottom="0dp"
-        android:visibility="visible">
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp">
 
         <LinearLayout
-            android:id="@+id/expenseFood"
+            android:id="@+id/gainCategoryATM"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
@@ -27,79 +26,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
-                android:src="@drawable/ic_expense_food" />
+                android:src="@drawable/ic_gain_atm_card" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
                 android:fontFamily="@font/roboto_thin"
-                android:text="Food"
+                android:text="@string/category_atm"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"
                 android:textSize="10dp" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/expenseTransportation"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:src="@drawable/ic_expense_transpo" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:fontFamily="@font/roboto_thin"
-                android:text="Transport"
-                android:textAlignment="center"
-                android:textColor="@android:color/white"
-                android:textSize="10dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/expenseRent"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:src="@drawable/ic_expense_rent" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:fontFamily="@font/roboto_thin"
-                android:text="Rent"
-                android:textAlignment="center"
-                android:textColor="@android:color/white"
-                android:textSize="10dp" />
-        </LinearLayout>
-
-
-
-        <LinearLayout
-            android:id="@+id/gainSalary"
+            android:id="@+id/gainCategorySalary"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
@@ -120,14 +61,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
                 android:fontFamily="@font/roboto_thin"
-                android:text="Salary"
+                android:text="@string/category_salary"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"
                 android:textSize="10dp" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/expenseMore"
+            android:id="@+id/gainCategoryAllowance"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
@@ -141,18 +82,95 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
-                android:src="@drawable/ic_expense_more" />
+                android:src="@drawable/ic_gain_allowance" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
                 android:fontFamily="@font/roboto_thin"
-                android:text="More"
+                android:text="@string/category_allowance"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"
                 android:textSize="10dp" />
         </LinearLayout>
 
-    </android.support.v7.widget.LinearLayoutCompat>
-</android.support.constraint.ConstraintLayout>
+        <LinearLayout
+            android:id="@+id/gainCategoryGift"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:src="@drawable/ic_gain_gift" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:fontFamily="@font/roboto_thin"
+                android:text="@string/category_gift"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="10dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:id="@+id/gainCategoryStocks"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:src="@drawable/ic_gain_stocks" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:fontFamily="@font/roboto_thin"
+                android:text="@string/category_stocks"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="10dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="3"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

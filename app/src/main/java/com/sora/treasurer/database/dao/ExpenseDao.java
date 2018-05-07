@@ -33,7 +33,7 @@ public interface ExpenseDao {
     @Query("Select * from expenses where ExpenseID = :ExpenseID")
     List<ExpenseEntity> findByID(long ExpenseID);
 
-    @Query("Select * from expenses where DateCreated like :DateCreated")
+    @Query("Select * from expenses where DateCreated like :DateCreated and Active = 1")
     List<ExpenseEntity> findExpensesPerDay(String DateCreated);
 
     @Query("Select distinct ExpenseID from expenses order by ExpenseID desc")

@@ -52,28 +52,98 @@
                         android:textColor="@android:color/white"
                         android:textStyle="bold" />
 
-                    <lecho.lib.hellocharts.view.LineChartView
-                        android:id="@+id/line_chart"
+
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="150dp"
-                        android:layout_marginTop="20dp" />
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <lecho.lib.hellocharts.view.LineChartView
+                            android:id="@+id/line_chart"
+                            android:layout_width="match_parent"
+                            android:layout_height="130dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginTop="10dp" />
+
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/linechart_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingBottom="0dp"
+                            android:visibility="gone">
+
+                        </com.github.mikephil.charting.charts.LineChart>
+
+                        <RelativeLayout
+                            android:id="@+id/TRAppReportSummary"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <LinearLayout
+                                android:layout_centerInParent="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="5dp"
+                                android:layout_marginTop="5dp"
+                                android:background="@drawable/rounded_corner"
+                                android:backgroundTint="#edeef3"
+                                android:orientation="horizontal"
+                                android:paddingBottom="1dp"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp"
+                                android:textAlignment="center">
+
+                                <TextView
+                                    android:id="@+id/TotalExpense"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/roboto_regular"
+                                    android:text="+500.00"
+                                    android:textAlignment="center"
+                                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                                    android:textColor="@color/colorExpense" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/ic_dashboard_info_summary_more" />
+
+                                <TextView
+                                    android:id="@+id/TotalGain"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:text="+500.00"
+                                    android:textAlignment="center"
+                                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                                    android:textColor="@color/colorGain" />
 
 
-                    <include layout="@layout/dashboard_expense_options" />
+                            </LinearLayout>
+                        </RelativeLayout>
+                        <!--<View-->
+                            <!--android:id="@+id/TRAppReportSummaryFull"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="150dp"-->
+                            <!--android:background="#edeef3" />-->
+                    </LinearLayout>
+
+
                 </android.support.v7.widget.LinearLayoutCompat>
+
             </RelativeLayout>
+
 
             <android.support.v7.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
                 android:orientation="vertical">
-
 
                 <android.support.v4.widget.SwipeRefreshLayout
                     android:id="@+id/swipeToRefreshExpenses"
                     android:layout_width="match_parent"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:layout_height="match_parent">
 
                     <ListView
@@ -81,7 +151,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:choiceMode="none" />
+                        android:choiceMode="none"
+                        android:divider="@null" />
+
+                    <!--<ExpandableListView-->
+                    <!--android:id="@+id/listView"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:choiceMode="none"-->
+                    <!--&gt;</ExpandableListView>-->
                 </android.support.v4.widget.SwipeRefreshLayout>
 
                 <TextView
@@ -92,12 +170,51 @@
                     android:visibility="gone" />
 
             </android.support.v7.widget.LinearLayoutCompat>
+
+
+
         </android.support.v7.widget.LinearLayoutCompat>
     </android.support.constraint.ConstraintLayout>
 
-    <include
-        layout="@layout/layout_fab_submenu"
-        android:visibility="invisible" />
+    <!--<include-->
+    <!--layout="@layout/layout_fab_submenu"-->
+    <!--android:visibility="visible" />-->
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/fabFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:orientation="vertical"
+        android:paddingBottom="0dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp">
+
+        <LinearLayout
+            android:id="@+id/layoutMainFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabMain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/ic_add_black_24dp"
+                android:tint="@android:color/white"
+
+                app:backgroundTint="?attr/colorPrimary"
+                app:elevation="0dp"
+                app:fabSize="normal" />
+
+        </LinearLayout>
+    </FrameLayout>
 
 </FrameLayout>
 

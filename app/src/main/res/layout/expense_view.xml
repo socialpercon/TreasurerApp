@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
     android:descendantFocusability="blocksDescendants"
     android:gravity="center_vertical"
@@ -10,48 +10,116 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp">
 
+    <LinearLayout
+        android:id="@+id/list_expense_section_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:visibility="visible"
+                android:id="@+id/list_item_date_day_text"
+                style="@style/TRAppTextThemeRegular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tue"
+                android:textAlignment="center"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="10dp" />
+
+            <TextView
+                android:visibility="visible"
+                android:id="@+id/list_item_date_day_value"
+                style="@style/TRAppTextThemeBold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-3dp"
+                android:text="19"
+                android:textAlignment="center"
+                android:textColor="@color/treasurerAppTheme"
+                android:textSize="13dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/expense_list_divider"></LinearLayout>
+
+                <TextView
+                    android:id="@+id/list_item_date_month_and_year"
+                    style="@style/TRAppTextThemeRegular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7dp"
+                    android:background="@android:color/white"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:text="January 2018"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/treasurerAppTheme"
+                    android:textSize="13dp"
+                    android:visibility="visible" />
+
+
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/list_layout_date"
             android:layout_width="60dp"
-            android:layout_height="80dp"
+            android:layout_height="50dp"
             android:layout_marginTop="2dp"
             android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
                     android:orientation="vertical"
                     android:textAlignment="center">
 
-                    <TextView
-                        android:id="@+id/list_item_date_month"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Jan"
-                        android:textAllCaps="true"
-                        android:textColor="@android:color/darker_gray"
-                        android:textStyle="bold" />
+                    <LinearLayout
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/circular_holder"
+                        android:backgroundTint="@color/treasurerAppTheme"
+                        android:gravity="center"
+                        android:textAlignment="center">
 
-                    <TextView
-                        android:id="@+id/list_item_date_day"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="-5dp"
-                        android:text="19"
-                        android:textColor="@android:color/darker_gray"
-                        android:textSize="25dp"
-                        android:textStyle="bold" />
+                        <ImageView
+                            android:id="@+id/list_item_category_image"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/ic_expense_food" />
+                    </LinearLayout>
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>
@@ -62,76 +130,53 @@
             android:layout_height="wrap_content"
 
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="10dp"
             android:layout_toLeftOf="@+id/list_layout_value"
             android:layout_toRightOf="@+id/list_layout_date"
             android:gravity="top"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/list_item_category"
+                android:id="@+id/list_item_category_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
-                android:text="Others"
+                android:text="Food"
                 android:textColor="@android:color/black"
-                android:textSize="14dp"
-                android:textStyle="bold" />
+                android:textSize="13dp"
+                android:fontFamily="@font/roboto_regular" />
 
             <TextView
                 android:id="@+id/list_item_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Some very very long texxt"
-                android:textSize="11dp"
+                android:text="Jollibee Delivery"
                 android:textColor="@color/colorCategory"
-                android:textStyle="normal" />
+                android:textSize="10dp"
+                android:fontFamily="@font/roboto_thin"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/list_layout_value"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:textAlignment="viewEnd"
-            android:orientation="vertical">
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:textAlignment="viewEnd">
 
-            <TextView
-                android:visibility="gone"
-                android:id="@+id/list_item_types"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_corner"
-                android:backgroundTint="#e91e63"
-                android:paddingBottom="2dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="1dp"
-                android:textAlignment="center"
-                android:text="Expense"
-                android:textColor="#ffffff"
-                android:textSize="8dp"
-                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/list_item_value"
-                android:textAlignment="viewEnd"
+                style="@style/TRAppTextThemeBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="4500.34PHP"
-                android:textColor="@color/colorCategory"
-                android:textSize="16dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/list_item_type"
+                android:text="-P4500.34"
                 android:textAlignment="viewEnd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Expense"
-                android:textColor="@color/colorExpense"
-                android:textSize="12dp"
-                android:textStyle="normal" />
+                android:textColor="@color/expense_tint"
+                android:textSize="14dp" />
         </LinearLayout>
     </RelativeLayout>
 

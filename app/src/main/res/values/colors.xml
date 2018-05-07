@@ -4,8 +4,10 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="colorExpense">#ef4656</color>
-    <color name="colorGain">#2196f3</color>
+    <color name="treasurerAppTheme">#3c4472</color>
+    <color name="colorExpense">#da6144</color>
+    <color name="colorGain">#37cbb7</color>
 
+    <color name="colorOptionsBG">#edeef3</color>
     <color name="colorCategory">#656565</color>
 </resources>

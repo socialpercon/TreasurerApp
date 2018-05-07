@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.sora.treasurer.database.AppDatabase;
 import com.sora.treasurer.database.entities.ExpenseEntity;
+import com.sora.treasurer.utils.DataService;
 
 public class AddExpenseActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -61,7 +62,7 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
                     showAlertDialog(true, expenseType + " value should not be blank");
                 } else {
                     double expenseVal = Double.valueOf(expenseValTxt.getText().toString());
-                    ExpenseEntity expenseEntity = new ExpenseEntity(expenseVal, expenseTypeForEntity, expenseDesc, 0);
+                    ExpenseEntity expenseEntity = new ExpenseEntity(expenseVal, expenseTypeForEntity, DataService.CATEGORY_OTHERS, "", expenseDesc, 0);
                     AppDatabase.getDatabase(this).expenseDao().CreateExpense(expenseEntity);
                     expenseDescTxt.setText("");
                     expenseValTxt.setText("");

@@ -3,10 +3,12 @@ package com.sora.treasurer.database.entities;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.google.gson.JsonObject;
 import com.sora.treasurer.enums.ExpenseTypes;
+import com.sora.treasurer.utils.DataService;
 import com.sora.treasurer.utils.Util;
 
 import org.json.JSONException;
@@ -26,6 +28,8 @@ public class ExpenseEntity {
     private int ExpenseType;
     private double ExpenseValue;
     private String ExpenseDescription;
+    private String ExpenseTags;
+    private String ExpenseCategory;
     // TEMPORARY SOFT DELETE
     private boolean Active;
     // BOOLEAN TO CHECK IF DATA IS SYNCED WITH SERVER
@@ -35,10 +39,12 @@ public class ExpenseEntity {
     private long DateModified;
 
     // MANUALLY CREATED
-    public ExpenseEntity(double ExpenseValue, int ExpenseType,String ExpenseDescription, long CreatedBy) {
+    public ExpenseEntity(double ExpenseValue, int ExpenseType, String ExpenseDescription, String ExpenseCategory, String ExpenseTags, long CreatedBy) {
         this.ExpenseValue = ExpenseValue;
         this.ExpenseType = ExpenseType;
         this.ExpenseDescription = ExpenseDescription;
+        this.ExpenseCategory = ExpenseCategory;
+        this.ExpenseTags = "";
         this.CreatedBy = CreatedBy;
         this.DateCreated = Util.getCurrentDateTimeInMillis();
         this.DateModified = Util.getCurrentDateTimeInMillis();
@@ -52,6 +58,9 @@ public class ExpenseEntity {
         this.ExpenseValue = expenseEntity.ExpenseValue;
         this.ExpenseType = expenseEntity.ExpenseType;
         this.ExpenseDescription = expenseEntity.ExpenseDescription;
+        if(expenseEntity.ExpenseCategory == null) this.ExpenseCategory = DataService.CATEGORY_OTHERS;
+        else this.ExpenseCategory = expenseEntity.ExpenseCategory;
+        this.ExpenseTags = "";
         this.CreatedBy = expenseEntity.CreatedBy;
         this.DateCreated = expenseEntity.DateCreated;
         this.DateModified = expenseEntity.DateModified;
@@ -69,9 +78,7 @@ public class ExpenseEntity {
     public String getExpenseServerID() {
         return this.ExpenseServerID;
     }
-    public void setExpenseServerID(String ExpenseServerID){
-        this.ExpenseServerID = ExpenseServerID;
-    }
+    public void setExpenseServerID(String ExpenseServerID){this.ExpenseServerID = ExpenseServerID; }
 
     public int getExpenseType() {
         return this.ExpenseType;
@@ -93,6 +100,17 @@ public class ExpenseEntity {
     public void setExpenseDescription(String ExpenseDescription){
         this.ExpenseDescription = ExpenseDescription;
     }
+
+    public String getExpenseCategory() {
+        return this.ExpenseCategory;
+    }
+    public void setExpenseCategory(String ExpenseCategory){this.ExpenseCategory = ExpenseCategory; }
+
+    public String getExpenseTags() {
+        return this.ExpenseTags;
+    }
+    public void setExpenseTags(String ExpenseTags){this.ExpenseTags = ExpenseTags; }
+
     public boolean getActive() {
         return this.Active;
     }
@@ -126,6 +144,8 @@ public class ExpenseEntity {
         this.ExpenseValue = expenseEntity.ExpenseValue;
         this.ExpenseType = expenseEntity.ExpenseType;
         this.ExpenseDescription = expenseEntity.ExpenseDescription;
+        if(expenseEntity.ExpenseCategory == null) this.ExpenseCategory = DataService.CATEGORY_OTHERS;
+        else this.ExpenseCategory = expenseEntity.ExpenseCategory;
         this.CreatedBy = expenseEntity.CreatedBy;
         this.DateCreated = expenseEntity.DateCreated;
         this.DateModified = expenseEntity.DateModified;
@@ -140,6 +160,7 @@ public class ExpenseEntity {
             obj.put("ExpenseType", getExpenseType());
             obj.put("ExpenseValue", getExpenseValue());
             obj.put("ExpenseDescription", getExpenseDescription());
+            obj.put("ExpenseCategory",(getExpenseCategory() == null)? DataService.CATEGORY_OTHERS : getExpenseCategory());
             obj.put("Active", getActive());
             obj.put("Updated", getUpdated());
             obj.put("CreatedBy", getCreatedBy());
@@ -159,6 +180,8 @@ public class ExpenseEntity {
                 "ExpenseServerID: " + String.valueOf(this.ExpenseServerID) + "," +
                 "ExpenseType: " + String.valueOf(this.ExpenseType) + "," +
                 "ExpenseDescription: " + String.valueOf(this.ExpenseDescription) + "," +
+                "ExpenseCategory: "+ String.valueOf(this.ExpenseCategory) + "," +
+                "ExpenseTags: " + String.valueOf(this.ExpenseTags) + "," +
                 "Active: " + String.valueOf(this.Active) + "," +
                 "CreatedBy: " + String.valueOf(this.CreatedBy) + "," +
                 "DateCreated: " + String.valueOf(this.DateCreated) + "," +

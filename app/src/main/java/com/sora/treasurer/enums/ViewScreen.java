@@ -13,7 +13,8 @@ public enum ViewScreen {
     VIEW_REPORTS(2),
 
 
-    VIEW_CREATE_EXPENSE_CATEGORY(3);
+    VIEW_CREATE_EXPENSE_CATEGORY(3),
+    VIEW_CREATE_EXPENSE_FORM(4);
 
     private int value;
     private static Map map = new HashMap<>();

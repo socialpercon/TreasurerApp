@@ -7,104 +7,147 @@
     android:paddingRight="0dp"
     tools:context="com.sora.treasurer.fragments.CreateExpenseCategoryFragment">
 
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-
-    <LinearLayout
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/category_choose_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"></LinearLayout>
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="5"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/category_choose_expense"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/expense_rounded_corner_active"
+                    >
+
+                    <TextView
+                        android:id="@+id/category_choose_expense_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Expense"
+                        android:textAlignment="center"
+                        android:textColor="@color/treasurerAppTheme" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/category_choose_gain"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="-3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/expense_gain_rounded_corner"
+                    >
+
+                    <TextView
+                        android:id="@+id/category_choose_gain_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Income"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/white" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+                >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="30dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:id="@+id/expenseCategoryFood"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:layout_weight="1"></LinearLayout>
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
-                        android:src="@drawable/ic_expense_food" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:orientation="vertical">
+
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="30dp"
                         android:fontFamily="@font/roboto_thin"
-                        android:text="Food"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="10dp" />
+                        android:text="Select a category from the list below"
+                        android:textAlignment="textStart"
+                        android:textColor="@android:color/white" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/include_gain_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="invisible">
+
+                            <include
+
+                                layout="@layout/category_list_gain"
+                                android:visibility="visible" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/include_expense_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="visible">
+
+                            <include layout="@layout/category_list_expense" />
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/expenseCategoryTranspo"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
-                        android:src="@drawable/ic_expense_transpo" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
-                        android:fontFamily="@font/roboto_thin"
-                        android:text="Transport"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="10dp" />
-                </LinearLayout>
-
+                    android:layout_weight="1"></LinearLayout>
             </LinearLayout>
 
 
+        </ScrollView>
 
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"></LinearLayout>
-    </LinearLayout>
-
-
-
-</ScrollView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <Button
+                android:id="@+id/form_category_cancel"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_rounded_corner"
+                android:text="Cancel"
+                android:textColor="@color/white_tint"/>
+        </RelativeLayout>
+    </android.support.v7.widget.LinearLayoutCompat>
 
 </FrameLayout>
